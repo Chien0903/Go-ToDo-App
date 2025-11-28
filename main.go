@@ -7,10 +7,13 @@ import (
 	chimw "github.com/go-chi/chi/v5/middleware"
 	"github.com/Chien0903/Go-ToDo-App/config"
 	"github.com/Chien0903/Go-ToDo-App/handlers"
+	"github.com/Chien0903/Go-ToDo-App/database"
 )
 
 func main() {
 	cfg := config.Load()
+
+	database.Connect(cfg.DSN())
 
 	r := chi.NewRouter()
 	r.Use(chimw.Logger)
@@ -24,4 +27,5 @@ func main() {
 	if err := http.ListenAndServe(cfg.Port, r); err != nil {
 		log.Fatal(err)
 	}
+
 }
