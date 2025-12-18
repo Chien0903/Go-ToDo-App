@@ -3,12 +3,19 @@ package config
 import (
 	"os"
 	"strings"
+	"fmt"
 	"github.com/joho/godotenv"	
 )
 
 type AppConfig struct {
 	Port       string
 	Environment string
+
+	DBUser string
+	DBPassword string
+	DBHost string
+	DBPort string
+	DBName string
 }
 
 func Load() AppConfig {
@@ -21,10 +28,32 @@ func Load() AppConfig {
 	
 	environment := getEnv("Environment","development")
 
+	dbUser := getEnv("DB_USER","root")
+	dbPassword := getEnv("DB_PASSWORD","")
+	dbHost := getEnv("DB_HOST","localhost")
+	dbPort := getEnv("DB_PORT","3306")
+	dbName := getEnv("DB_NAME","todo_app")
+
 	return AppConfig{
 		Port: port,
 		Environment: environment,
+
+		DBUser: dbUser,
+		DBPassword: dbPassword,
+		DBHost: dbHost,
+		DBPort: dbPort,
+		DBName: dbName,
 	}
+}
+
+func (c AppConfig) DSN() string {
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		c.DBUser,
+		c.DBPassword,
+		c.DBHost,
+		c.DBPort,
+		c.DBName,
+	)
 }
 
 func getEnv(key, def string) string {

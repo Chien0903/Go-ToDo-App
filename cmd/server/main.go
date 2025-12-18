@@ -8,11 +8,18 @@ import (
 	chimw "github.com/go-chi/chi/v5/middleware"
 
 	"github.com/Chien0903/Go-ToDo-App/internal/config"
+	"github.com/Chien0903/Go-ToDo-App/internal/database"
 	"github.com/Chien0903/Go-ToDo-App/internal/handlers/rest"
 )
 
 func main() {
 	cfg := config.Load()
+
+	// Khởi tạo kết nối DB MySQL (GORM) – dùng database.Connect với AppConfig
+	if err := database.Connect(cfg); err != nil {
+		log.Fatalf("cannot connect to database: %v", err)
+	}
+	// Sau này có thể dùng database.DB để truyền vào repository/services
 
 	r := chi.NewRouter()
 	r.Use(chimw.Logger)
