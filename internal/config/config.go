@@ -16,6 +16,9 @@ type AppConfig struct {
 	DBHost string
 	DBPort string
 	DBName string
+
+	JWTSecret        string
+    JWTExpiresMinute string
 }
 
 func Load() AppConfig {
@@ -33,6 +36,8 @@ func Load() AppConfig {
 	dbHost := getEnv("DB_HOST","localhost")
 	dbPort := getEnv("DB_PORT","3306")
 	dbName := getEnv("DB_NAME","todo_app")
+	jwtSecret := getEnv("JWT_SECRET","secret")
+	jwtExpiresMinute := getEnv("JWT_EXPIRES_MINUTE","60")
 
 	return AppConfig{
 		Port: port,
@@ -43,6 +48,8 @@ func Load() AppConfig {
 		DBHost: dbHost,
 		DBPort: dbPort,
 		DBName: dbName,
+		JWTSecret: jwtSecret,
+		JWTExpiresMinute: jwtExpiresMinute,
 	}
 }
 
